@@ -1,33 +1,35 @@
-#
-# This is the user-interface definition of a Shiny web application. You can
-# run the application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-# 
-#    http://shiny.rstudio.com/
-#
-
+library(tidyverse)
 library(shiny)
+library(plotly)
+library(DT)
 
 # Define UI for application that draws a histogram
-shinyUI(fluidPage(theme = shinytheme("yeti"),
+shinyUI(fluidPage(
   
   # Application title
   titlePanel("Goodreads Data"),
   
-  # Sidebar with a slider input for number of bins 
-  sidebarLayout(
-    sidebarPanel(
-       sliderInput("bins",
-                   "Number of bins:",
-                   min = 1,
-                   max = 50,
-                   value = 30)
-    ),
-    
-    # Show a plot of the generated distribution
-    mainPanel(
-       plotOutput("distPlot")
+  mainPanel(
+    tabsetPanel(
+      tabPanel("Pages Read by Genre",
+               plotlyOutput("output1"),
+               plotlyOutput("output2"),
+               plotlyOutput("output3")
+      ),
+      tabPanel("Individual Book Data",
+               dataTableOutput('booktable')
+      ),
+      tabPanel("Leaderboard",
+               fluidRow(width = 12,
+                        column(4,
+                               #Add an icon or some formatting here
+                               dataTableOutput('topAuthors')),
+                        column(3, offset = 2,
+                               dataTableOutput('topGenre_books')),
+                        column(3,
+                               dataTableOutput('topGenre_pages')))
+      )
     )
   )
-))
+)
+)
